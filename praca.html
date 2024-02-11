@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikacje internetowe</title>
+    <style>
+        body {
+            background-color: #f4f4f4; /* Bardzo jasnoszare tło */
+            font-family: Arial, sans-serif; /* Ustawienie czcionki */
+            margin: 0; /* Usunięcie marginesów */
+            padding: 0; /* Usunięcie paddingu */
+        }
+
+        h1 {
+            text-align: center; /* Wyśrodkowanie tytułu */
+            margin-top: 20px; /* Odstęp od góry */
+        }
+
+        #game-container {
+            width: 500px; /* Szerokość kontenera gry */
+            margin: 0 auto; /* Wyśrodkowanie kontenera */
+            position: relative; /* Ustawienie pozycji względem okna przeglądarki */
+            margin-top: 50px; /* Odstęp od góry */
+        }
+
+        .mini {
+            border: 1px solid #ddd; /* Grubość i kolor obramowania */
+            width: 100px;
+            height: 100px;
+            display: inline-block; /* Wymuszenie wyświetlania w linii */
+            margin: 5px; /* Margines wokół kafelków */
+            cursor: pointer; /* Zmiana kursora na wskaźnik */
+            overflow: hidden; /* Ukrycie zawartości poza obszarem kafelka */
+        }
+
+        .mini img {
+            width: 100%; /* Dopasowanie obrazka do szerokości kafelka */
+            height: auto; /* Automatyczna wysokość obrazka */
+            transition: transform 0.3s ease; /* Efekt przejścia */
+        }
+
+        .mini:hover img {
+            transform: scale(1.1); /* Powiększenie obrazka po najechaniu myszką */
+        }
+
+        .buttons {
+            text-align: center; /* Wyśrodkowanie przycisków */
+            margin-top: 20px; /* Odstęp od góry */
+        }
+
+        .buttons button {
+            margin: 5px; /* Margines między przyciskami */
+            padding: 10px 20px; /* Wielkość przycisków */
+            cursor: pointer; /* Zmiana kursora na wskaźnik */
+            background-color: #007bff; /* Kolor tła przycisków */
+            color: #fff; /* Kolor tekstu */
+            border: none; /* Usunięcie obramowania */
+            border-radius: 5px; /* Zaokrąglenie rogów */
+        }
+
+        .buttons button:hover {
+            background-color: #0056b3; /* Kolor tła przycisku po najechaniu */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Memory Game</h1>
+<div id="game-container">
+    <div class="mini" data-img="kaf1" style="left: 50px; top: 50px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf4" style="left: 150px; top: 50px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf10" style="left: 250px; top: 50px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf2" style="left: 350px; top: 50px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf3" style="left: 50px; top: 150px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf7" style="left: 150px; top: 150px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf9" style="left: 250px; top: 150px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf2" style="left: 350px; top: 150px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf5" style="left: 50px; top: 250px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf6" style="left: 150px; top: 250px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf8" style="left: 250px; top: 250px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf4" style="left: 350px; top: 250px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf10" style="left: 50px; top: 350px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf5" style="left: 150px; top: 350px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf6" style="left: 250px; top: 350px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf8" style="left: 350px; top: 350px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf9" style="left: 50px; top: 450px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf1" style="left: 150px; top: 450px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf3" style="left: 250px; top: 450px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+    <div class="mini" data-img="kaf7" style="left: 350px; top: 450px;" onclick="Graj(this)"><img src="kaf11.jpg"></div>
+</div>
+
+<div class="buttons">
+    <button id="cyk" onclick="Zakryj()">Zakryj</button>
+    <button onclick="Pomieszaj()">Pomieszaj</button>
+</div>
+
+<script>
+    let TabPos = [[50, 50, 0], [50, 150, 0], [150, 50, 0], [150, 150, 0]];
+
+    // Odkryj wszystkie kafelki na początku gry
+    window.onload = function () {
+        let kafelki = document.querySelectorAll(".mini");
+        kafelki.forEach(kafel => {
+            Odkryj(kafel);
+        });
+    };
+
+    function Zakryj() {
+        let kafelki = document.querySelectorAll(".mini img");
+        kafelki.forEach(kafel => {
+            kafel.src = "kaf11.jpg";
+        });
+    }
+
+    function Odkryj(a) {
+        a.querySelector("img").src = a.dataset.img + ".jpg";
+    }
+
+    function Pomieszaj() {
+    let gameContainer = document.getElementById("game-container");
+    let kafelki = gameContainer.querySelectorAll(".mini");
+
+    // Create an array to store the original order of image names
+    let originalOrder = [];
+    kafelki.forEach(kafel => {
+        originalOrder.push(kafel.dataset.img);
+    });
+
+    // Shuffle the array
+    originalOrder.sort(() => Math.random() - 0.5);
+
+    // Assign the shuffled image names to the tiles
+    kafelki.forEach((kafel, index) => {
+        kafel.dataset.img = originalOrder[index];
+        Odkryj(kafel); // Show the images on the tiles
+    });
+}
+
+    let p = 0,
+        one;
+
+    function Graj(a) {
+        if (p == 0) {
+            Zakryj();
+            Odkryj(a);
+            one = a;
+            p = 1;
+        } else {
+            Odkryj(a);
+            if (one.innerHTML == a.innerHTML) {
+                one.style.visibility = "hidden";
+                a.style.visibility = "hidden";
+            }
+            p = 0;
+        }
+    }
+</script>
+
+</body>
+</html>
